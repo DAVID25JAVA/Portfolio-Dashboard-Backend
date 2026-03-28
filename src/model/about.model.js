@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const aboutSchema = mongoose.Schema(
   {
     image: {
-      type: String,
+      type: [String],
       required: [true, "Image is required"],
     },
     name: {
