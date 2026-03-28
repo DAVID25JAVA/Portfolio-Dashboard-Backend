@@ -1,14 +1,27 @@
 import aboutModel from "../model/about.model.js";
+import { v2 as cloudinary } from "cloudinary";
 
 export const createAbout = async (req, res) => {
   try {
-    const { image, name, developerRole, summery } = req.body;
+    const { name, developerRole, summery } = req.body;
+
+    //   get image
+    const image = req?.files;
+    // console.log("image-->", image);
+
+    //   upload image on cloudinary
+      const imageUrl = await Promise.all(
+      image.map(async (item) => {
+        const result = await cloudinary.uploader.upload(item.path);
+        return result.secure_url;
+      })
+    );
 
     const data = await aboutModel.create({
-      image,
       name,
       developerRole,
       summery,
+      image: imageUrl,
     });
 
     return res.json({
@@ -40,11 +53,9 @@ export const updateAbout = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const updated = await aboutModel.findByIdAndUpdate(
-      id,
-      req.body,
-      { new: true }
-    );
+    const updated = await aboutModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
 
     if (!updated) {
       return res.json({
