@@ -22,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 const allowOrigin = [
   "https://portfolio-dashboard-three-iota.vercel.app",
   "http://localhost:3000",
+  "https://david-portfolio-o7yw.vercel.app"
 ];
 
 app.use(
